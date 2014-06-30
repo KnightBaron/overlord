@@ -101,6 +101,11 @@ def api_hoststats():
   hoststats = query.hoststats()
   return {"result" : hoststats}
 
+@get('/api/hostinfo/<hostname>')
+def api_hoststats(hostname):
+  hostinfo = query.hostinfo(hostname)
+  return {"result" : hostinfo}
+
 @get('/api/flowlist/<hostname>')
 def api_flowlist(hostname):
   flowlist = query.flowlist(hostname)
@@ -135,6 +140,14 @@ def api_aggregate_host(hostname, module, metric):
   for k,v in table.items():
     table[k]['last_dt'] = query.dt_to_timestamp(table[k]['last_dt'])
   return {"result": table}
+
+#@get('/api/config/addhost')
+
+#@get('/api/config/delhost')
+
+#@get('/api/config/addflow')
+
+#@get('/api/config/delflow')
 
 if __name__ == '__main__':
   run (host='0.0.0.0', port=8082, debug=True,reloader=True)

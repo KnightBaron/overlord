@@ -1,4 +1,6 @@
 from pymongo import MongoClient
+import sys
+import common
 import os
 import time
 from server import config
