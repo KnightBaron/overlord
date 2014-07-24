@@ -15,9 +15,9 @@ Requirement
 =============
 The target host will need Python runtime to run the components. These components had been develop and test on Ubuntu but should work on others Linux as well with the following requirments for each components.
 
-- Server: bottle framework, pymongo driver
+- Server: bottle framework, pymongo driver, paste
 - Web: bottle framework, pymongo driver
-- Agent: ping and iperf installed, requests library
+- Agent: ping and netperf installed, requests library, psutils
 
 
 Server Installation
