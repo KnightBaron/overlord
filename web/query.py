@@ -209,6 +209,43 @@ def graph_force():
 
   return graph
 
+
+def latest_query():
+  """
+  Query latest monitored value
+
+  Known issues:
+  - all known modules/metrics are hard-coded
+  - return as flow lists, ignore hostsinformation
+  """
+  results = list()
+  conn = MongoClient(config.MONGO_SERVER)[config.MONGO_DB]
+  # hosts = [host["hostname"] for host in conn.host.find()]
+  flows = [(flow["src"], flow["dest"]) for flow in conn.flow.find()]
+  modules = {
+    # "module_name": ["metric_name", ...]
+    "ping": ["min", "max", "avg"],
+    "iperf": ["bandwidth"],
+    # "utilization": ["cpu", "loadavg", "net"],
+  }
+  for flow in flows:
+    flow_result = {
+      "src": flow[0],
+      "dest": flow[1],
+    }
+    for module in modules:
+      data = conn.values.find({
+        "src": flow[0],
+        "dest": flow[1],
+        "type": module,
+      }).sort("dt", -1).limit(1)
+      flow_result[module] = dict()
+      flow_result[module]["dt"] = dt_to_timestamp(data[0]["dt"])
+      for metric in modules[module]:
+        flow_result[module][metric] = data[0][metric]
+    results.append(flow_result)
+  return results
+
 if __name__ == '__main__':
   dt_start = datetime.datetime.now() - datetime.timedelta(minutes=1700)
   dt_end = datetime.datetime.now()

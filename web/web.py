@@ -141,6 +141,11 @@ def api_aggregate_host(hostname, module, metric):
     table[k]['last_dt'] = query.dt_to_timestamp(table[k]['last_dt'])
   return {"result": table}
 
+@get('/api/latest')
+def api_latest():
+  return {"result": query.latest_query()}
+  # return latest_query()
+
 #@get('/api/config/addhost')
 
 #@get('/api/config/delhost')
